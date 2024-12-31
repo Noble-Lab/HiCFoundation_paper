@@ -44,8 +44,8 @@ Then you can see detailed instructions in the command line.
 #### 2. Generate submatrix from .pkl file
 Please run the following command to generate submatrices from ,pkl file:
 ```
-python3 scan_array.py --input_pkl_path [pkl_path] --input_row_size 448
-    --input_col_size 448 --stride_row 224 --stride_col 224 
+python3 scan_array.py --input_pkl_path [pkl_path] --input_row_size 448 \
+    --input_col_size 448 --stride_row 224 --stride_col 224 \
     --output_dir [output_dir] --filter_threshold 0.01
 ```
 - pkl_path: str, input pickle path
@@ -57,6 +57,7 @@ The suggested submatrices output of each pkl should be put under the ``output_di
 #### 3. Pre-training of HiCFoundation
 After preparing the data, please follow the pre-training framework instructions on [HiCFoundation](https://github.com/Noble-Lab/HiCFoundation).  <br>
 Then you can train HiCFoundation from scratch.
+
 
 
 

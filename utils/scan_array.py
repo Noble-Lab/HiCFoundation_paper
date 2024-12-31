@@ -1,6 +1,7 @@
 import numpy as np
 import pickle
-from scripy.sparse import coo_matrix
+from scipy.sparse import coo_matrix
+
 import os
 def write_pickle(output_dict,output_path):
     """
