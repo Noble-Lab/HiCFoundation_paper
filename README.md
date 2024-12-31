@@ -27,9 +27,16 @@ Xiao Wang, Yuanyuan Zhang, Suhita Ray, Anupama Jha, Tangqi Fang, Shengqi Hang, S
 ## HiCFoundation setup
 Please follow the instructions of [HiCFoundation](https://github.com/Noble-Lab/HiCFoundation) repo to install HiCFoundation and configure its environment.
 
-### Pre-training pipeline of HiCFoundation
 
-#### 1. Convert different formats to pickle array file
+## Hi-C experiments collection from database
+
+
+## Pre-training pipeline of HiCFoundation
+
+<details>
+<summary>Pre-training pipeline of HiCFoundation</summary>
+
+### 1. Convert different formats to pickle array file
 We can support the Hi-C experiments recorded in the following format. Please use the following script under ``utils`` directory to convert them into .pkl file for further processing. 
 - .hic file: Please use [hic2array.py](utils/hic2array.py) script to convert all cis, trans contact to .pkl file.
 - .cool file: Please use [cool2array.py](utils/cool2array.py) script to convert all cis, trans contact to .pkl file.
@@ -41,7 +48,7 @@ python3 [script.py]
 ```
 Then you can see detailed instructions in the command line. 
 
-#### 2. Generate submatrix from .pkl file
+### 2. Generate submatrix from .pkl file
 Please run the following command to generate submatrices from ,pkl file:
 ```
 python3 scan_array.py --input_pkl_path [pkl_path] --input_row_size 448 \
@@ -54,10 +61,14 @@ python3 scan_array.py --input_pkl_path [pkl_path] --input_row_size 448 \
 
 The suggested submatrices output of each pkl should be put under the ``output_dir/[hic_id]``, that can be easily processed by the pre-training framework in [HiCFoundation](https://github.com/Noble-Lab/HiCFoundation) repo.
 
-#### 3. Pre-training of HiCFoundation
+### 3. Pre-training of HiCFoundation
 After preparing the data, please follow the pre-training framework instructions on [HiCFoundation](https://github.com/Noble-Lab/HiCFoundation).  <br>
 Then you can train HiCFoundation from scratch.
 
 
+</details>
+
+## Fine-tuning pipeline of HiCFoundation
 
 
+## Figure visualization in HiCFoundation paper
