@@ -1,6 +1,6 @@
 # HiCFoundation_paper
 
-This repo includes data processing, visualization pipeline used in HiCFoundation paper. 
+This repo includes data processing pipeline of HiCFoundation paper. 
 
 HiCFoundation is a generalizable Hi-C foundation model for chromatin architecture, single-cell and multi-omics analysis across species.
 
@@ -91,7 +91,8 @@ All the instructions in run is included in the script. You can simply run the fo
 ```
 python3 [script.py]
 ```
-Then you can see detailed instructions in the command line. 
+Then you can see detailed instructions in the command line. <br>
+We used 5kb resolution for pre-training to include more data for training.
 
 ### 3. Generate submatrix from .pkl file
 Please run the following command to generate submatrices from ,pkl file:
@@ -115,7 +116,41 @@ Then you can train HiCFoundation from scratch.
 
 ## Fine-tuning pipeline of HiCFoundation
 
-### 1. 
+<details>
+<summary>Fine-tuning pipeline of HiCFoundation</summary>
+
+### 1. Download the data from database
+Please follow the instructions to download data for different tasks of HiCFoundation.
+- [Reproducibility task](#2-data-for-fine-tuning-of-reproducibility-task).
+- [Chromatin loop detection task](#3-data-for-fine-tuning-of-chromatin-loop-detection-task).
+- [Resolution enhancement task](#4-data-for-fine-tuning-of-resolution-enhancement-task).
+- [Epigenomic assay profiling task](#5-data-for-fine-tuning-of-epigenomic-assay-profiling-task).
+- [Single-cell Hi-C analysis](#6-data-for-fine-tuning-of-single-cell-hi-c-analysis).
+
+### 2. Convert the data to submatrix for fine-tuning
+The submatrices should be saved in .pkl format for HiCFoundation fine-tuning framework processing. <br>
+```
+"input": the input Hi-C/scHi-C matrix in scipy.sparse or numpy.array format, shape: (M,N);
+"input_count": the total count of Hi-C expriment, should be a float scalar value;  (optional)
+"2d_target": the output Hi-C/scHi-C matrix in scipy.sparse or numpy.array format, shape: (M,N); (optional)
+"embed_target": the embedding 1D vector in numpy.array format, shape: (512);  (optional)
+"1d_target": the 1D target vector in numpy.array format, shape: (M); (optional)
+```
 
 
-## Figure visualization in HiCFoundation paper
+#### 2.1 Convert Hi-C files in .pkl format
+First convert all .hic files to .pkl files using specified resolution.
+```
+python3 hic2array.py {input_hic} {output_pkl} {resolution} 0 2
+```
+- {input_hic} is the input Hi-C file path
+- {output_pkl} is the converted .pkl file path
+- {Resolution} is the resolution for analysis (integer). 25000 (25kb) for the reproducibility task, 10000 (10kb) for resolution enhancement/loop detection task, 1000 (1kb) for epigenomic assay task, 1000000 (1 Mb) for single-cell analysis
+- 0 indicates None normalization applied, 2 indicates saving cis-contact in scipy.sparse coo_matrix format.
+
+
+#### 2,2 Generate submatrix for different tasks
+
+
+
+
