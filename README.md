@@ -31,10 +31,15 @@ Please follow the instructions of [HiCFoundation](https://github.com/Noble-Lab/H
 ## Hi-C experiments collection from database
 ### 1. All Hi-C experiments downloading
 Please follow the instructions in [notebook](notebooks/pretrain_data.ipynb) to download the .hic data needed for pre-training or other purposes. <br>
-To use such data for pre-training like HiCFoundation, please see [Pre-training section](#Pre-training pipeline of HiCFoundation) to use the downloaded data for pre-training purposes.
+To use such data for pre-training like HiCFoundation, please see [Pre-training section](#Pre-training-pipeline-of-HiCFoundation) to use the downloaded data for pre-training purposes.
 
+### 2. Data for fine-tuning of reproducibility task
+Please follow the instructions in [notebook](notebooks/reproducibility_data.ipynb) to download the needed files for reproducibility task. <br>
+To further convert those files to .hic file for further processing, please check the 
+[4DN_pipeline](https://github.com/4dn-dcic/docker-4dn-hic) to convert .bam/.pairs file to .hic file for further processing. <br>
+To use such data for fine-tuning HiCFoundation, please see [Fine-tuning section](#fine-tuning-pipeline-of-hicfoundation) to use the downloaded data for fine-tuning purposes.
 
-
+### 3. Data for fine-tuning of 
 
 ## Pre-training pipeline of HiCFoundation
 
