@@ -29,6 +29,11 @@ Please follow the instructions of [HiCFoundation](https://github.com/Noble-Lab/H
 
 
 ## Hi-C experiments collection from database
+### 1. All Hi-C experiments downloading
+Please follow the instructions in [notebook](notebooks/pretrain_data.ipynb) to download the .hic data needed for pre-training or other purposes. <br>
+To use such data for pre-training like HiCFoundation, please see [Pre-training section](#Pre-training pipeline of HiCFoundation) to use the downloaded data for pre-training purposes.
+
+
 
 
 ## Pre-training pipeline of HiCFoundation
