@@ -29,6 +29,10 @@ Please follow the instructions of [HiCFoundation](https://github.com/Noble-Lab/H
 
 
 ## Hi-C experiments collection from database
+
+<details>
+<summary>This section includes detailed steps for collecting data for HiCFoundation pre-training and fine-tuning. </summary>
+
 ### 1. All Hi-C experiments downloading
 Please follow the instructions in [notebook](notebooks/pretrain_data.ipynb) to download the .hic data needed for pre-training or other purposes. <br>
 To use such data for pre-training like HiCFoundation, please see [Pre-training section](#Pre-training-pipeline-of-HiCFoundation) to use the downloaded data for pre-training purposes.
@@ -39,7 +43,24 @@ To further convert those files to .hic file for further processing, please check
 [4DN_pipeline](https://github.com/4dn-dcic/docker-4dn-hic) to convert .bam/.pairs file to .hic file for further processing. <br>
 To use such data for fine-tuning HiCFoundation, please see [Fine-tuning section](#fine-tuning-pipeline-of-hicfoundation) to use the downloaded data for fine-tuning purposes.
 
-### 3. Data for fine-tuning of 
+### 3. Data for fine-tuning of chromatin loop detection task
+Please follow the instructions in [notebook](notebooks/loop_data.ipynb) to download the needed files for loop detection task. <br>
+To further convert those files to .hic file for further processing, please check the 
+[4DN_pipeline](https://github.com/4dn-dcic/docker-4dn-hic) to convert .bam/.pairs file to .hic file for further processing. <br>
+To use such data for fine-tuning HiCFoundation, please see [Fine-tuning section](#fine-tuning-pipeline-of-hicfoundation) to use the downloaded data for fine-tuning purposes.
+
+### 4. Data for fine-tuning of resolution enhancement task
+Please follow the instructions in [notebook](notebooks/resolution_data.ipynb) to download the needed files for resolution enhancement task. <br>
+To use such data for fine-tuning HiCFoundation, please see [Fine-tuning section](#fine-tuning-pipeline-of-hicfoundation) to use the downloaded data for fine-tuning purposes.
+
+### 5. Data for fine-tuning of epigenomic assay profiling task
+Please follow the instructions in [notebook](notebooks/epigenomic_data.ipynb) to download the needed files for epigenomic profiling task. <br>
+To use such data for fine-tuning HiCFoundation, please see [Fine-tuning section](#fine-tuning-pipeline-of-hicfoundation) to use the downloaded data for fine-tuning purposes.
+
+### 6. Data for fine-tuning of single-cell Hi-C analysis
+
+
+</details>
 
 ## Pre-training pipeline of HiCFoundation
 
