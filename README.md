@@ -60,6 +60,17 @@ To use such data for fine-tuning HiCFoundation, please see [Fine-tuning section]
 ### 6. Data for fine-tuning of single-cell Hi-C analysis
 
 
+
+### 7. Download multi-species Hi-C dataset
+Please follow the instructions in [notebook](notebooks/multispecies_data.ipynb) to download the needed files for multi-species analysis. <br>
+Then please run inference on the processed .pkl file following instructions in [HiCFoundation](https://github.com/Noble-Lab/HiCFoundation/tree/main#inference-of-fine-tuned-hicfoundation) repo.
+
+
+### 8. Download HSPC and neutrophil data
+The related Hi-C files can be downloaded from [GEO website](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE174533). <br>
+For example, you can download the HSPC control Hi-C files from [link](https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE174533&format=file&file=GSE174533%5F1%2DC11%2DCB1%2E2%2DC11%2DCB2%2Emerge%2Ehic). <br>
+Then please run inference on the .hic file following instructions in [HiCFoundation](https://github.com/Noble-Lab/HiCFoundation/tree/main#inference-of-fine-tuned-hicfoundation) repo.
+
 </details>
 
 ## Pre-training pipeline of HiCFoundation
@@ -67,7 +78,10 @@ To use such data for fine-tuning HiCFoundation, please see [Fine-tuning section]
 <details>
 <summary>Pre-training pipeline of HiCFoundation</summary>
 
-### 1. Convert different formats to pickle array file
+### 1. Download Hi-C data from database
+Please check [1. All Hi-C experiments downloading](#1-all-hi-c-experiments-downloading) to download all Hi-C data for pre-training purposes.
+
+### 2. Convert different formats to pickle array file
 We can support the Hi-C experiments recorded in the following format. Please use the following script under ``utils`` directory to convert them into .pkl file for further processing. 
 - .hic file: Please use [hic2array.py](utils/hic2array.py) script to convert all cis, trans contact to .pkl file.
 - .cool file: Please use [cool2array.py](utils/cool2array.py) script to convert all cis, trans contact to .pkl file.
@@ -79,7 +93,7 @@ python3 [script.py]
 ```
 Then you can see detailed instructions in the command line. 
 
-### 2. Generate submatrix from .pkl file
+### 3. Generate submatrix from .pkl file
 Please run the following command to generate submatrices from ,pkl file:
 ```
 python3 scan_array.py --input_pkl_path [pkl_path] --input_row_size 448 \
@@ -92,7 +106,7 @@ python3 scan_array.py --input_pkl_path [pkl_path] --input_row_size 448 \
 
 The suggested submatrices output of each pkl should be put under the ``output_dir/[hic_id]``, that can be easily processed by the pre-training framework in [HiCFoundation](https://github.com/Noble-Lab/HiCFoundation) repo.
 
-### 3. Pre-training of HiCFoundation
+### 4. Pre-training of HiCFoundation
 After preparing the data, please follow the pre-training framework instructions on [HiCFoundation](https://github.com/Noble-Lab/HiCFoundation).  <br>
 Then you can train HiCFoundation from scratch.
 
@@ -100,6 +114,8 @@ Then you can train HiCFoundation from scratch.
 </details>
 
 ## Fine-tuning pipeline of HiCFoundation
+
+### 1. 
 
 
 ## Figure visualization in HiCFoundation paper

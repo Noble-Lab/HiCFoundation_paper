@@ -103,7 +103,7 @@ def hic2array(input_hic,output_pkl=None,
 
 Usage
 ```
-python3 hic2array_simple.py [input.hic] [output.pkl] [resolution] [normalization_type] [mode]
+python3 hic2array.py [input.hic] [output.pkl] [resolution] [normalization_type] [mode]
 ```
 
 This is the full cool2array script, converting both intra, inter chromosome regions to array format. <br>
@@ -130,7 +130,7 @@ if __name__ == '__main__':
     import os 
     import sys
     if len(sys.argv) != 6:
-        print('Usage: python3 hic2array_simple.py [input.hic] [output.pkl] [resolution] [normalization_type] [mode]')
+        print('Usage: python3 hic2array.py [input.hic] [output.pkl] [resolution] [normalization_type] [mode]')
         print("This is the full hic2array script. ")
         print("normalization type: 0: None normalization; 1: VC normalization; 2: VC_SQRT normalization; 3: KR normalization; 4: SCALE normalization")
         print("mode: 0 for sparse matrix, 1 for dense matrix, 2 for sparce matrix (only cis-contact); 3 for dense matrix (only cis-contact).")
