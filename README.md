@@ -236,8 +236,11 @@ After obtaining the epigenomic .pkl file, then please update "1d_target" key in 
 
 Using the prepared submatrix .pkl files, please follow the instructions on [Fine-tuning framework of HiCFoundation](https://github.com/Noble-Lab/HiCFoundation/tree/main?tab=readme-ov-file#fine-tuning-hicfoundation-for-new-tasks) on HiCFoundation repo to start fine-tuning HiCFoundation for specific tasks.
 
+</details>
+
 
 ## Inference pipeline of HiCFoundation
+
 For inference of HiCFoundation for different tasks, please see instructions of [inference of HiCFoundation](https://github.com/Noble-Lab/HiCFoundation/tree/main?tab=readme-ov-file#inference-of-fine-tuned-hicfoundation) on HiCFoundation repo to do inference for different tasks.
 
 
