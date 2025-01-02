@@ -97,7 +97,7 @@ We used 5kb resolution for pre-training to include more data for training.
 ### 3. Generate submatrix from .pkl file
 Please run the following command to generate submatrices from ,pkl file:
 ```
-python3 scan_array.py --input_pkl_path [pkl_path] --input_row_size 448 \
+python3 utils/scan_array.py --input_pkl_path [pkl_path] --input_row_size 448 \
     --input_col_size 448 --stride_row 224 --stride_col 224 \
     --output_dir [output_dir] --filter_threshold 0.01
 ```
@@ -121,11 +121,12 @@ Then you can train HiCFoundation from scratch.
 
 ### 1. Download the data from database
 Please follow the instructions to download data for different tasks of HiCFoundation.
-- [Reproducibility task](#2-data-for-fine-tuning-of-reproducibility-task).
-- [Chromatin loop detection task](#3-data-for-fine-tuning-of-chromatin-loop-detection-task).
-- [Resolution enhancement task](#4-data-for-fine-tuning-of-resolution-enhancement-task).
-- [Epigenomic assay profiling task](#5-data-for-fine-tuning-of-epigenomic-assay-profiling-task).
-- [Single-cell Hi-C analysis](#6-data-for-fine-tuning-of-single-cell-hi-c-analysis).
+- [Reproducibility task](#hi-c-experiments-collection-from-database).
+- [Chromatin loop detection task](#hi-c-experiments-collection-from-database).
+- [Resolution enhancement task](#hi-c-experiments-collection-from-database).
+- [Epigenomic assay profiling task](#hi-c-experiments-collection-from-database).
+- [Single-cell Hi-C analysis](#hi-c-experiments-collection-from-database).
+They are under different sections in the [dataset collection section](#hi-c-experiments-collection-from-database). Please check corresponding section for more details.
 
 ### 2. Convert the data to submatrix for fine-tuning
 The submatrices should be saved in .pkl format for HiCFoundation fine-tuning framework processing. <br>
@@ -141,7 +142,7 @@ The submatrices should be saved in .pkl format for HiCFoundation fine-tuning fra
 #### 2.1 Convert Hi-C files in .pkl format
 First convert all .hic files to .pkl files using specified resolution.
 ```
-python3 hic2array.py {input_hic} {output_pkl} {resolution} 0 2
+python3 utils/hic2array.py {input_hic} {output_pkl} {resolution} 0 2
 ```
 - {input_hic} is the input Hi-C file path
 - {output_pkl} is the converted .pkl file path
@@ -150,7 +151,94 @@ python3 hic2array.py {input_hic} {output_pkl} {resolution} 0 2
 
 
 #### 2,2 Generate submatrix for different tasks
+For reproducibility/loop/resolution/single-cell task, please run the following command line to generate submatrices.
+```
+python3 utils/scan_array_diag.py --input_pkl_path [pkl_path] --input_row_size 224 \
+    --input_col_size 224 --stride 20 \
+    --output_dir [output_dir] 
+```
+This script will generate many submatrices for fine-tuning of different tasks. 
+- [pkl_path]: The processed pkl file generated from last step.
+- [output_dir]: The output directory 
 
+For epigenomic assay profiling task, please run the following command line to generate submatrices.<br>
+```
+python3 utils/scan_array_diag_center.py --input_pkl_path [pkl_path] --input_row_size 128 \
+    --input_col_size 4000 --stride 32 \
+    --output_dir [output_dir] 
+```
+Here we need to make sure the training samples of the center of columns in the submatrices corresponds to the center of the diagonal line.
+
+
+#### 2.3 Modify submatrix information with labels
+##### 2.3.1 Reproducibility analysis
+No further labels are needed. Based on [Table](data/Supplementary_Table_hicfoundation.xlsx) Sup3 sheet, embeddings of any submatrix from BR should be similar, while from NR should be different. <br>
+Then please integrate triplet loss in [loss_function](https://github.com/Noble-Lab/HiCFoundation/blob/main/finetune/loss.py) in [HiCFoundation](https://github.com/Noble-Lab/HiCFoundation) repo.
+```
+import torch.nn as nn
+import torch.nn.functional as F
+criterion =  nn.TripletMarginWithDistanceLoss(
+         distance_function=lambda x, y: 1.0 - F.cosine_similarity(x, y),margin=1.0)
+loss = criterion(anchor, positive, negative)
+```
+where the anchor, positive, negative are the embeddings of BR1, BR2 and NR.
+
+##### 2.3.2 Chromatin loop detection
+Please first run HiCCUPs to call loops at each BR separately by taking the processed .hic file as input.
+```
+python3 utils/hiccups_loop.py [hicFile] [output_dir] [resolution]
+```
+- [hicFile] is the processed .hic file from .bam/.pairs file (illustrated in [dataset preparing section](#hi-c-experiments-collection-from-database))
+- [output_dir] is the output dir to store the detected loops in .bedpe format
+- [resolution] specified resolution to run, can be choice of 5000 (5kb), 10000 (10kb) and 25000 (25kb).
+
+Then you can merge the loop calls from two BRs, and use the consensus loop to train the model. <br>
+To merge the loop calls, please run the following command
+```
+python3 utils/merge_BRloop.py [BR1_loop.bedpe] [BR2_loop.bedpe] [resolution] [output.bedpe]
+```
+- [BR1_loop.bedpe] is the hiccups loop call from BR1.hic, which stored in ``merged_loops.bedpe`` in your specified directory.
+- [BR2_loop.bedpe] is the hiccups loop call from BR2.hic, which stored in ``merged_loops.bedpe`` in your specified directory.
+- [resolution] is the resolution of loop calls, can be choice of 5000 (5kb), 10000 (10kb) and 25000 (25kb).
+- [output.bedpe] is the specified path to store the consensus loop
+
+You can then use the [output.bedpe] to modify each submatrce's "2d_target" key in .pkl file.
+In our setting, we assigned We the neighboring 5×5 pixels (50 kb×50 kb at 10kb resolution) of the loop calls as pixel-wise loop labels. <br>
+You can modify the [assign_label](utils/loop_assignment.py) function to assign pixel-level loop target for model's training.
+
+##### 2.3.3 Resolution enhancement detection (bulk/single-cell)
+Here the input should be downsampled submatrix, the output should be the original submatrix. <br>
+The 1st step is to get the downsampled pair of a Hi-C experiment. You can do by the following command:
+```
+python3 utils/downsample_pkl.py [input.pkl] [downsample.pkl] [downsample_ratio]
+```
+- [input.pkl] the input pickle that includes all Hi-C information, which is processed in [dataset collection section](#hi-c-experiments-collection-from-database) by converting .hic/.cool/.pairs data.
+- [downsample.pkl] the output pickle that included ddownsampled Hi-C information.
+- [downsample_ratio] the downsample ratio applied to the Hi-C.
+
+Then you can moidfy [scan_array_diag.py](utils/scan_array_diag.py) function to scan across [input.pkl] and [downsample.pkl], then the submatrices from [input.pkl] should be saved into ``2d_target`` key, and the submatrices from [downsample.pkl] should be saved into ``input`` key.
+
+
+##### 2.3.4 Epigenomic assay profiling
+After collecting the .bigWig files of different epigenomic assays, please first convert them into .pkl file for further processing.
+```
+python3 utils/bigwig2array.py [input_bw] [output_pkl] [resolution]
+```
+[input_bw]: the input bigwig file. <br>
+[output_pkl]: the output pkl file with [chrom]:[signal] format. <br>
+[resolution]: the output resolution of the signal. <br>
+Here our resolution for epigenomic assay is 1000 (1kb).
+
+After obtaining the epigenomic .pkl file, then please update "1d_target" key in the submatrix's pkl file. You can simply update the [script](utils/scan_array_diag_center.py) to also get the corresponding 1D signal from the epigenomic .pkl file and save it to the "1d_target" key in the submatrix .pkl file.
+
+
+### 3. Finetune HiCFoundation using training data
+
+Using the prepared submatrix .pkl files, please follow the instructions on [Fine-tuning framework of HiCFoundation](https://github.com/Noble-Lab/HiCFoundation/tree/main?tab=readme-ov-file#fine-tuning-hicfoundation-for-new-tasks) on HiCFoundation repo to start fine-tuning HiCFoundation for specific tasks.
+
+
+## Inference pipeline of HiCFoundation
+For inference of HiCFoundation for different tasks, please see instructions of [inference of HiCFoundation](https://github.com/Noble-Lab/HiCFoundation/tree/main?tab=readme-ov-file#inference-of-fine-tuned-hicfoundation) on HiCFoundation repo to do inference for different tasks.
 
 
 
