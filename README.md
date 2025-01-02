@@ -126,6 +126,7 @@ Please follow the instructions to download data for different tasks of HiCFounda
 - [Resolution enhancement task](#hi-c-experiments-collection-from-database).
 - [Epigenomic assay profiling task](#hi-c-experiments-collection-from-database).
 - [Single-cell Hi-C analysis](#hi-c-experiments-collection-from-database).
+
 They are under different sections in the [dataset collection section](#hi-c-experiments-collection-from-database). Please check corresponding section for more details.
 
 ### 2. Convert the data to submatrix for fine-tuning
@@ -150,7 +151,7 @@ python3 utils/hic2array.py {input_hic} {output_pkl} {resolution} 0 2
 - 0 indicates None normalization applied, 2 indicates saving cis-contact in scipy.sparse coo_matrix format.
 
 
-#### 2,2 Generate submatrix for different tasks
+#### 2.2 Generate submatrix for different tasks
 For reproducibility/loop/resolution/single-cell task, please run the following command line to generate submatrices.
 ```
 python3 utils/scan_array_diag.py --input_pkl_path [pkl_path] --input_row_size 224 \
@@ -172,7 +173,7 @@ Here we need to make sure the training samples of the center of columns in the s
 
 #### 2.3 Modify submatrix information with labels
 ##### 2.3.1 Reproducibility analysis
-No further labels are needed. Based on [Table](data/Supplementary_Table_hicfoundation.xlsx) Sup3 sheet, embeddings of any submatrix from BR should be similar, while from NR should be different. <br>
+No further labels are needed. Based on [Supplementary Table](data/Supplementary_Table_hicfoundation.xlsx) Sup3 sheet, embeddings of any submatrix from BR should be similar, while from NR should be different. <br>
 Then please integrate triplet loss in [loss_function](https://github.com/Noble-Lab/HiCFoundation/blob/main/finetune/loss.py) in [HiCFoundation](https://github.com/Noble-Lab/HiCFoundation) repo.
 ```
 import torch.nn as nn
@@ -181,7 +182,7 @@ criterion =  nn.TripletMarginWithDistanceLoss(
          distance_function=lambda x, y: 1.0 - F.cosine_similarity(x, y),margin=1.0)
 loss = criterion(anchor, positive, negative)
 ```
-where the anchor, positive, negative are the embeddings of BR1, BR2 and NR.
+where the anchor, positive, negative are the embeddings of BR1, BR2 and NR, respectively.
 
 ##### 2.3.2 Chromatin loop detection
 Please first run HiCCUPs to call loops at each BR separately by taking the processed .hic file as input.
