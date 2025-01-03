@@ -242,7 +242,10 @@ Using the prepared submatrix .pkl files, please follow the instructions on [Fine
 
 ## Inference pipeline of HiCFoundation
 
-For inference of HiCFoundation for different tasks, please see instructions of [inference of HiCFoundation](https://github.com/Noble-Lab/HiCFoundation/tree/main?tab=readme-ov-file#inference-of-fine-tuned-hicfoundation) on HiCFoundation repo to do inference for different tasks.
+<details>
+<summary>Inference pipeline of HiCFoundation</summary>
+For inference of HiCFoundation for different tasks, please see instructions of [inference of HiCFoundation](https://github.com/Noble-Lab/HiCFoundation/tree/main?tab=readme-ov-file#inference-of-fine-tuned-hicfoundation) on HiCFoundation repo to do inference for different tasks. <br>
+Recommended: [Google Colab](https://github.com/Noble-Lab/HiCFoundation/blob/main/HiCFoundation.ipynb). Please consider to use Google colab to do online inference if you only wanted to test a few examples, where the environment is automatically configured.
 
-
+</details>
 
