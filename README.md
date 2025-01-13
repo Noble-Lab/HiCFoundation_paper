@@ -58,7 +58,8 @@ Please follow the instructions in [notebook](notebooks/epigenomic_data.ipynb) to
 To use such data for fine-tuning HiCFoundation, please see [Fine-tuning section](#fine-tuning-pipeline-of-hicfoundation) to use the downloaded data for fine-tuning purposes.
 
 ### 6. Data for fine-tuning of single-cell Hi-C analysis
-
+Please follow the instructions in [notebook](notebooks/schic_data.ipynb) to download the needed files for single-cell HiC resolution enhancement task. <br>
+To use such data for fine-tuning HiCFoundation, please see [Fine-tuning section](#fine-tuning-pipeline-of-hicfoundation) to use the downloaded data for fine-tuning purposes.
 
 
 ### 7. Download multi-species Hi-C dataset
