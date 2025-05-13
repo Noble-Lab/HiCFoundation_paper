@@ -93,10 +93,15 @@ def scan_pickle(input_pkl_path, input_row_size,input_col_size, stride_row,
         matrix = data[key]
         if isinstance(matrix, coo_matrix):
             matrix = matrix.toarray()
-            #get the symmetrical one 
-            upper_tri = np.triu(matrix,1)
-            all_triu = np.triu(matrix)
-            matrix = all_triu + upper_tri.T
+            
+            if matrix.shape[0]==matrix.shape[1]:
+                #intra chromosmoe
+                #get the symmetrical one 
+                upper_tri = np.triu(matrix,1)
+                all_triu = np.triu(matrix)
+                matrix = all_triu + upper_tri.T
+            else:
+                matrix = matrix
         current_chrom = str(key)
         if "chr" not in current_chrom:
             current_chrom = "chr" + current_chrom
